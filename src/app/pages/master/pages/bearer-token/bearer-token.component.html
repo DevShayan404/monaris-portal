@@ -1,0 +1,98 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="child-section">
+        <div class="row">
+          <div class="col-12">
+            <h4 class="m-0">Bearer Token</h4>
+          </div>
+          <div class="col-12">
+            <form [formGroup]="bearerTokenForm" (ngSubmit)="submitBearerForm()">
+              <div class="row g-3 mt-2">
+                <div class="col-6">
+                  <label for="grantType" class="form-label text-secondary"
+                    >Grant Type</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="grantType"
+                    formControlName="grantType"
+                    [ngClass]="{ 'is-invalid': isControlInvalid('grantType') }"
+                    placeholder=""
+                  />
+                </div>
+                <div class="col-6">
+                  <label for="clientId" class="form-label text-secondary"
+                    >Client Id</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="clientId"
+                    formControlName="clientId"
+                    [ngClass]="{ 'is-invalid': isControlInvalid('clientId') }"
+                    placeholder=""
+                  />
+                </div>
+                <div class="col-6">
+                  <label for="clientSecret" class="form-label text-secondary"
+                    >Client Secret</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="clientSecret"
+                    formControlName="clientSecret"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('clientSecret')
+                    }"
+                    placeholder=""
+                  />
+                </div>
+                <div class="col-6">
+                  <label for="scope" class="form-label text-secondary"
+                    >Scope</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="scope"
+                    formControlName="scope"
+                    [ngClass]="{ 'is-invalid': isControlInvalid('scope') }"
+                    placeholder=""
+                  />
+                </div>
+                <!-- <div class="col-12">
+                  <label for="authUrl" class="form-label text-secondary"
+                    >Auth Url</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="authUrl"
+                    formControlName="authUrl"
+                    [ngClass]="{ 'is-invalid': isControlInvalid('authUrl') }"
+                    placeholder=""
+                  />
+                </div> -->
+                <div class="col pt-3">
+                  <button class="btn btn-warning d-flex align-items-center">
+                    Submit @if (spinner) {
+                    <div
+                      class="spinner-grow spinner-grow-sm ms-2"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    }
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,995 @@
+<div class="container-fluid merchant-main">
+  <div class="row g-3">
+    <div class="col-3">
+      <div
+        class="child-section"
+        style="min-height: calc(100vh - 20vh); padding: 20px 0 20px 20px"
+      >
+        <nz-steps [nzCurrent]="current" nzProgressDot nzDirection="vertical">
+          <nz-step nzTitle="Chain Details"></nz-step>
+          <nz-step nzTitle="Banking Details"></nz-step>
+          <nz-step nzTitle="Business Details"></nz-step>
+          <nz-step nzTitle="Merchant Details"></nz-step>
+          <nz-step nzTitle="Merchant Location"></nz-step>
+          <nz-step nzTitle="Business Activity"></nz-step>
+          <nz-step nzTitle="Security Details"></nz-step>
+        </nz-steps>
+      </div>
+    </div>
+    <div class="col-9">
+      <div
+        class="child-section"
+        style="
+          min-height: calc(100vh - 20vh);
+          max-height: calc(100vh - 20vh);
+          overflow: auto;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        "
+      >
+        <div class="row">
+          @switch (current) { @case (0) {
+          <!-- ---------------Chain Details Form-------------- -->
+          <form [formGroup]="chainDetails">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary">First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="firstName"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidChainDetails('firstName')
+                    }"
+                  />
+                  @if ( chainDetails.get('firstName')?.hasError('maxlength') &&
+                  chainDetails.get('firstName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 30.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Last Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="lastName"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidChainDetails('lastName')
+                    }"
+                  />
+                  @if ( chainDetails.get('lastName')?.hasError('maxlength') &&
+                  chainDetails.get('lastName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 30.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Phone</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="phone"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidChainDetails('phone')
+                    }"
+                  />
+                  @if ( chainDetails.get('phone')?.hasError('maxlength') &&
+                  chainDetails.get('phone')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 10.</div>
+                  }@else if ( chainDetails.get('phone')?.hasError('minlength')
+                  && chainDetails.get('phone')?.touched ) {
+                  <div class="invalid-feedback">Minimum length of 10.</div>
+                  }
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label text-secondary">Chain Id</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    nzShowSearch
+                    nzAllowClear
+                    [nzDropdownRender]="renderTemplate"
+                    nzPlaceHolder=""
+                    formControlName="chainId"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidChainDetails('chainId')
+                    }"
+                  >
+                    @for (item of dropdownList?.merchantChains ; track item) {
+                    <nz-option
+                      [nzLabel]="item?.number + ' ' + item?.chainDescription"
+                      [nzValue]="item?.number"
+                    ></nz-option>
+                    }
+                  </nz-select>
+                  <ng-template #renderTemplate>
+                    <nz-divider></nz-divider>
+                    <div class="container mb-2">
+                      <div class="row">
+                        <div class="col-12">
+                          <form
+                            [formGroup]="addChainIdForm"
+                            (ngSubmit)="addChainId()"
+                          >
+                            <div class="d-flex">
+                              <input
+                                type="text"
+                                class="form-control"
+                                formControlName="addChainId"
+                                [ngClass]="{
+                                  'is-invalid':
+                                    isControlInvalidAddChainId('addChainId')
+                                }"
+                              />
+                              <button
+                                style="width: 100px"
+                                class="btn btn-warning ms-2"
+                                type="submit"
+                              >
+                                @if (chainIdSpinner ) {
+                                <div
+                                  class="spinner-grow spinner-grow-sm"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden"
+                                    >Loading...</span
+                                  >
+                                </div>
+                                } @else { <i class="bi bi-plus-lg me-1"></i>Add
+                                }
+                              </button>
+                            </div>
+
+                            <div
+                              *ngIf="isControlInvalidAddChainId('addChainId')"
+                              style="color: #dc3545 !important"
+                            >
+                              <div
+                                *ngIf="
+                                  addChainIdForm
+                                    .get('addChainId')
+                                    ?.hasError('invalidLength')
+                                "
+                              >
+                                Please enter exactly 13 digits.
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </form>
+          } @case (1) {
+          <!-- ---------------Banking Details Form-------------- -->
+          <form [formGroup]="bankingDetails">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary">Currency</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="currency"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidBankingDetails('currency')
+                    }"
+                  >
+                    @for (option of dropdownList?.merchantCurrencies ; track
+                    $index) {
+                    <nz-option
+                      [nzLabel]="option?.code"
+                      [nzValue]="option?.code"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Institution</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="institution"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBankingDetails('institution')
+                    }"
+                  />
+                  @if ( bankingDetails.get('institution')?.hasError('maxlength')
+                  && bankingDetails.get('institution')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 5.</div>
+                  }@else if (
+                  bankingDetails.get('institution')?.hasError('minlength') &&
+                  bankingDetails.get('institution')?.touched ) {
+                  <div class="invalid-feedback">Minimum length of 5.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Transit</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="transit"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidBankingDetails('transit')
+                    }"
+                  />
+                  @if ( bankingDetails.get('transit')?.hasError('maxlength') &&
+                  bankingDetails.get('transit')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 5.</div>
+                  }@else if (
+                  bankingDetails.get('transit')?.hasError('minlength') &&
+                  bankingDetails.get('transit')?.touched ) {
+                  <div class="invalid-feedback">Minimum length of 5.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Account no.</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="accountNo"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidBankingDetails('accountNo')
+                    }"
+                  />
+                  @if ( bankingDetails.get('accountNo')?.hasError('maxlength')
+                  && bankingDetails.get('accountNo')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 17.</div>
+                  }
+                </div>
+              </div>
+            </div>
+          </form>
+          }@case (2) {
+          <!-- ---------------Business Details Form-------------- -->
+          <form [formGroup]="businessDetails">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Master Card Volume</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="masterCardVolume"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('masterCardVolume')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Visa Volume</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="visaVolume"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('visaVolume')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Discover Volume</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="discoverVolume"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('discoverVolume')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Union Pay Volume</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="unionPayVolume"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('unionPayVolume')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Interac Volume</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="interacVolume"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('interacVolume')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Amex Volume</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="amexVolume"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('amexVolume')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">MCC</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="mcc"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidBusinessDetails('mcc')
+                    }"
+                  >
+                    @for (option of dropdownList?.categoryCodes ; track $index)
+                    {
+                    <nz-option
+                      [nzLabel]="option?.code + ' - ' + option?.description"
+                      [nzValue]="option?.code"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Avg Ticket Size</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="avgTicketSize"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('avgTicketSize')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Max Transaction</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="maxTransaction"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('maxTransaction')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Direct Selling</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="directSelling"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('directSelling')
+                    }"
+                  />
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label text-secondary">E-Commerce</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="eCommerce"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidBusinessDetails('eCommerce')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Moto</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="moto"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidBusinessDetails('moto')
+                    }"
+                  />
+                </div>
+                <div class="col-12">
+                  <label class="form-label text-secondary">Business URL</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="businessUrl"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('businessUrl')
+                    }"
+                  />
+                  @if (
+                  businessDetails.get('businessUrl')?.hasError('maxlength') &&
+                  businessDetails.get('businessUrl')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 100.</div>
+                  }
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary"
+                    >Service Deliver to Canada</label
+                  >
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="serviceDeliverToCanada"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidBusinessDetails(
+                        'serviceDeliverToCanada'
+                      )
+                    }"
+                  >
+                    @for (option of booleanList ; track $index) {
+                    <nz-option
+                      [nzLabel]="option.toString() | titlecase"
+                      [nzValue]="option"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary"
+                    >Service Deliver to US</label
+                  >
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="serviceDeliverToUS"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('serviceDeliverToUS')
+                    }"
+                  >
+                    @for (option of booleanList ; track $index) {
+                    <nz-option
+                      [nzLabel]="option.toString() | titlecase"
+                      [nzValue]="option"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary"
+                    >Is Seasonal Merchant</label
+                  >
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="isSeasonalMerchant"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessDetails('isSeasonalMerchant')
+                    }"
+                  >
+                    @for (option of booleanList ; track $index) {
+                    <nz-option
+                      [nzLabel]="option.toString() | titlecase"
+                      [nzValue]="option"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+          </form>
+          }@case (3) {
+          <!-- ---------------Merchant Details Form-------------- -->
+          <form [formGroup]="merchantDetails">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary">Legal Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="legalName"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidMerchantDetails('legalName')
+                    }"
+                  />
+                  @if ( merchantDetails.get('legalName')?.hasError('maxlength')
+                  && merchantDetails.get('legalName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 30.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">E-mail</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="email"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidMerchantDetails('email')
+                    }"
+                  />
+                  @if ( merchantDetails.get('email')?.hasError('maxlength') &&
+                  merchantDetails.get('email')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 60.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Operating as Name</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="operatingAsName"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantDetails('operatingAsName')
+                    }"
+                  />
+                  @if (
+                  merchantDetails.get('operatingAsName')?.hasError('maxlength')
+                  && merchantDetails.get('operatingAsName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 30.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Language</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="language"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidMerchantDetails('language')
+                    }"
+                  >
+                    @for (option of dropdownList?. merchantLanguages ; track
+                    $index) {
+                    <nz-option
+                      [nzLabel]="option?.code | uppercase"
+                      [nzValue]="option?.code | lowercase"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Card Holder Name</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="cardHolderName"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantDetails('cardHolderName')
+                    }"
+                  />
+                  @if (
+                  merchantDetails.get('cardHolderName')?.hasError('maxlength')
+                  && merchantDetails.get('cardHolderName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 30.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Years of Ownership</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="yearOfOwnership"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantDetails('yearOfOwnership')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Month of Ownership</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="monthOfOwnerShip"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantDetails('monthOfOwnerShip')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Customer Service Phone no.</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="customerServicePhoneNo"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidMerchantDetails(
+                        'customerServicePhoneNo'
+                      )
+                    }"
+                  />
+                  @if (
+                  merchantDetails.get('customerServicePhoneNo')?.hasError('maxlength')
+                  && merchantDetails.get('customerServicePhoneNo')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 20.</div>
+                  }
+                </div>
+              </div>
+            </div>
+          </form>
+          }@case (4) {
+          <!-- ---------------Merchant Location Form-------------- -->
+          <form [formGroup]="merchantLocation">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Location Type Id</label
+                  >
+
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="locationTypeId"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantLocation('locationTypeId')
+                    }"
+                  >
+                    @for (option of dropdownList?.locationTypes ; track $index)
+                    {
+                    <nz-option
+                      [nzLabel]="option?.name"
+                      [nzValue]="option?.name"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Telephone</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="telephone"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantLocation('telephone')
+                    }"
+                  />
+                  @if ( merchantLocation.get('telephone')?.hasError('maxlength')
+                  && merchantLocation.get('telephone')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 10.</div>
+                  }@else if (
+                  merchantLocation.get('telephone')?.hasError('minlength') &&
+                  merchantLocation.get('telephone')?.touched ) {
+                  <div class="invalid-feedback">Minimum length of 10.</div>
+                  }
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label text-secondary">Country</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="country"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidMerchantLocation('country')
+                    }"
+                  >
+                    @for (option of dropdownList?.countries ; track $index) {
+                    <nz-option
+                      [nzLabel]="option?.name + ' - ' + option?.code"
+                      [nzValue]="option?.code"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Province</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="province"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidMerchantLocation('province')
+                    }"
+                  >
+                    @for (option of dropdownList?.provinces ; track $index) {
+                    <nz-option
+                      [nzLabel]="option?.name + ' - ' + option?.code"
+                      [nzValue]="option?.code"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">City</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="city"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidMerchantLocation('city')
+                    }"
+                  >
+                    @for (option of dropdownList?. city; track $index) {
+                    <nz-option
+                      [nzLabel]="option?.name"
+                      [nzValue]="option?.name"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Postal Code</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="postalCode"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantLocation('postalCode')
+                    }"
+                  />
+                  @if (
+                  merchantLocation.get('postalCode')?.hasError('maxlength') &&
+                  merchantLocation.get('postalCode')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 6.</div>
+                  }@else if (
+                  merchantLocation.get('postalCode')?.hasError('minlength') &&
+                  merchantLocation.get('postalCode')?.touched ) {
+                  <div class="invalid-feedback">Minimum length of 6.</div>
+                  }@else if
+                  (merchantLocation.get('postalCode')?.hasError('invalidPostalCode'))
+                  {
+                  <div class="invalid-feedback">
+                    Invalid Canadian postal code format. (e.g., A1A1A1)
+                  </div>
+                  }
+                </div>
+                <div class="col-12">
+                  <label class="form-label text-secondary">Address no.</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="addressNo"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantLocation('addressNo')
+                    }"
+                  />
+                  @if ( merchantLocation.get('addressNo')?.hasError('maxlength')
+                  && merchantLocation.get('addressNo')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 09.</div>
+                  }
+                </div>
+                <div class="col-12">
+                  <label class="form-label text-secondary">Street Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="streetName"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantLocation('streetName')
+                    }"
+                  />
+                  @if (
+                  merchantLocation.get('streetName')?.hasError('maxlength') &&
+                  merchantLocation.get('streetName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 50.</div>
+                  }
+                </div>
+              </div>
+            </div>
+          </form>
+          }@case (5) {
+          <!-- ---------------Business Activity Form-------------- -->
+          <form [formGroup]="businessActivity">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label text-secondary">Drop Shipping</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="dropShipping"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidBusinessActivity('dropShipping')
+                    }"
+                  >
+                    @for (option of booleanList ; track $index) {
+                    <nz-option
+                      [nzLabel]="option.toString() | titlecase"
+                      [nzValue]="option"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+          </form>
+          }@case (6) {
+          <!-- ---------------Security Details Form-------------- -->
+          <form [formGroup]="securityDetails">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary">First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="firstName"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidSecurityDetails('firstName')
+                    }"
+                  />
+                  @if ( securityDetails.get('firstName')?.hasError('maxlength')
+                  && securityDetails.get('firstName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 30.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Last Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="lastName"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidSecurityDetails('lastName')
+                    }"
+                  />
+                  @if ( securityDetails.get('lastName')?.hasError('maxlength')
+                  && securityDetails.get('lastName')?.touched ) {
+                  <div class="invalid-feedback">Maximum length of 30.</div>
+                  }
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Birth Date</label>
+                  <nz-date-picker
+                    nzPlacement="bottomLeft"
+                    style="border: 0"
+                    class="form-control"
+                    formControlName="birthDate"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidSecurityDetails('birthDate')
+                    }"
+                    nzPlaceHolder=" "
+                  ></nz-date-picker>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Allow Credit Reports</label
+                  >
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="allowCreditReports"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidSecurityDetails('allowCreditReports')
+                    }"
+                  >
+                    @for (option of booleanList ; track $index) {
+                    <nz-option
+                      [nzLabel]="option.toString() | titlecase"
+                      [nzValue]="option"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Percentage Ownership</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="percentageOwnership"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidSecurityDetails(
+                        'percentageOwnership'
+                      )
+                    }"
+                  />
+                  @if(securityDetails.get('percentageOwnership')?.hasError('invalidPercentage')){
+                  <div class="invalid-feedback">
+                    Percentage ownership must be between 0 to 100.
+                  </div>
+                  }
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label text-secondary">Title</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="title"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidSecurityDetails('title')
+                    }"
+                  >
+                    @for (option of dropdownList?.merchantTitles ; track $index)
+                    {
+                    <nz-option
+                      [nzLabel]="option?.name | uppercase"
+                      [nzValue]="option?.name | uppercase"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label text-secondary"
+                    >Type of Business</label
+                  >
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="typeOfBusiness"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidMerchantLocation('typeOfBusiness')
+                    }"
+                  >
+                    @for (option of dropdownList?.typeOfBusinesses ; track
+                    $index) {
+                    <nz-option
+                      [nzLabel]="option?.name"
+                      [nzValue]="option?.name"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+          </form>
+          } }
+        </div>
+        <!-- -------------------buttons----------------------- -->
+        <div class="steps-action mt-3">
+          <button
+            (click)="pre()"
+            *ngIf="current > 0"
+            class="btn btn-warning text-white"
+          >
+            <i class="bi bi-chevron-left"></i> Previous
+          </button>
+          <div class="float-end">
+            <button
+              class="btn btn-warning text-white"
+              (click)="next()"
+              *ngIf="current < 6"
+            >
+              Next <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="float-end">
+            <button
+              class="btn btn-warning text-white"
+              (click)="onSubmitSecurityDetails()"
+              *ngIf="current === 6"
+            >
+              Submit @if (spinner) {
+              <div class="spinner-grow spinner-grow-sm ms-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

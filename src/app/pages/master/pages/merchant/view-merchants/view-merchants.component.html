@@ -1,0 +1,317 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="child-section">
+        <div class="row align-items-center">
+          <div class="col-3">
+            <nz-input-group [nzPrefix]="prefixTemplateUser">
+              <input
+                type="text"
+                nz-input
+                placeholder="Search here..."
+                [(ngModel)]="searchKeyword"
+              />
+            </nz-input-group>
+            <ng-template #prefixTemplateUser>
+              <i nz-icon class="bi bi-search"></i
+            ></ng-template>
+          </div>
+          <div class="col-9">
+            <div class="float-end">
+              <button class="btn btn-warning" (click)="generatePDF()">
+                <i class="bi bi-box-arrow-in-down-left me-1"></i>Export
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <nz-table
+              #basicTable
+              [nzData]="tableList | search : searchKeyword"
+              nzSize="middle"
+              ngSkipHydration
+              [nzPageSize]="7"
+              [nzPageIndex]="1"
+              [nzLoading]="loading"
+              [nzFrontPagination]="true"
+            >
+              <thead>
+                <tr>
+                  <th>MID</th>
+                  <th>Chain Id</th>
+                  <th>Legal Name</th>
+                  <th>E-mail</th>
+                  <th>Phone no</th>
+                  <th>Operating as Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (data of basicTable.data; track data?.id; let i = $index) {
+                <tr>
+                  <td class="text-secondary">{{ data?.merchantID }}</td>
+                  <td class="text-secondary">{{ data?.chainID }}</td>
+                  <td class="text-secondary">
+                    @if ( data?.legalName) {
+                    {{ data?.legalName }}
+                    }@else {
+                    <i class="bi bi-dash"></i>
+                    }
+                  </td>
+                  <td class="text-secondary">
+                    @if ( data?.email) {
+                    {{ data?.email }}
+                    }@else {
+                    <i class="bi bi-dash"></i>
+                    }
+                  </td>
+                  <td class="text-secondary">
+                    @if ( data?.phoneNumber) {
+                    {{ data?.phoneNumber }}
+                    }@else {
+                    <i class="bi bi-dash"></i>
+                    }
+                  </td>
+                  <td class="text-secondary">
+                    @if ( data?.operatingName) {
+                    {{ data?.operatingName }}
+                    }@else {
+                    <i class="bi bi-dash"></i>
+                    }
+                  </td>
+                  <td>
+                    @if (!spinner[i]) {
+                    <i
+                      class="bi bi-eye-fill text-primary"
+                      style="cursor: pointer"
+                      (click)="viewMerchantDetail(data?.id, i)"
+                    ></i>
+                    }@else {
+                    <nz-spin nzSimple [nzSize]="'small'"></nz-spin>
+                    }
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nz-drawer
+  [nzVisible]="visible"
+  [nzWidth]="640"
+  [nzClosable]="false"
+  (nzOnClose)="close()"
+>
+  <ng-container *nzDrawerContent>
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+      <h3>Merchant Details</h3>
+      <button class="btn btn-warning" (click)="generateDetailPDF()">
+        <i class="bi bi-box-arrow-in-down-left me-1"></i>Export
+      </button>
+    </div>
+    @for (list of merchantDetail[0]?.chainDetails; track $index) {
+    <nz-descriptions [nzColumn]="2" nzTitle="Chain Details">
+      <nz-descriptions-item nzTitle="First Name" [nzSpan]="1">{{
+        list.firstName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Last Name" [nzSpan]="1">{{
+        list.lastName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Phone No" [nzSpan]="1">{{
+        list.phone
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Chain Id" [nzSpan]="1">{{
+        list.chainId
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+    }
+    <!-- <nz-divider></nz-divider> -->
+    @for (list of merchantDetail[1]?.bankingDetails ; track $index) {
+    <nz-descriptions [nzColumn]="2" nzTitle="Banking Details">
+      <nz-descriptions-item nzTitle="Currency" [nzSpan]="1">{{
+        list.currency
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Institution" [nzSpan]="1">{{
+        list.institution
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Transit" [nzSpan]="1">{{
+        list.transit
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Account No" [nzSpan]="1">{{
+        list.accountNo
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+    }
+    <!-- <nz-divider></nz-divider> -->
+    @for (list of merchantDetail[2]?.businessDetails ; track $index) {
+    <nz-descriptions [nzColumn]="2" nzTitle="Business Details">
+      <nz-descriptions-item nzTitle="Master Card Volumn" [nzSpan]="1">{{
+        list.mastercard
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Visa Volumn" [nzSpan]="1">{{
+        list.visacard
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Discover Volumn" [nzSpan]="1">{{
+        list.discover
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Union Pay Volumn" [nzSpan]="1">{{
+        list.unionPay
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Interac Volumn" [nzSpan]="1">{{
+        list.interac
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Amex Volumn" [nzSpan]="1">{{
+        list.amex
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="MCC" [nzSpan]="1">{{
+        list.mcc
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Avg Ticket Size" [nzSpan]="1">{{
+        list.avgTicketZise
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Max Transaction" [nzSpan]="1">{{
+        list.maxTransaction
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Direct Selling" [nzSpan]="1">{{
+        list.directSelling
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="E-Commerce" [nzSpan]="1">{{
+        list.eCommerce
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Moto" [nzSpan]="1">{{
+        list.moto
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Business URl" [nzSpan]="1">{{
+        list.businessUrl
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Service Deliver to Canada" [nzSpan]="1">{{
+        list.serviceDeliverToCanada
+      }}</nz-descriptions-item>
+      <nz-descriptions-item
+        nzTitle="
+      Service Deliver to US"
+        [nzSpan]="1"
+        >{{ list.serviceDeliverToUS }}</nz-descriptions-item
+      >
+      <nz-descriptions-item nzTitle="Is Seasonal Merchant" [nzSpan]="1">{{
+        list.isSeasonalNerchant
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+    }
+    <!-- <nz-divider></nz-divider> -->
+    @for (list of merchantDetail[3]?.merchantDetail ; track $index) {
+    <nz-descriptions [nzColumn]="2" nzTitle="Merchant Detail">
+      <nz-descriptions-item nzTitle="Legal Name" [nzSpan]="1">{{
+        list.legalName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Language" [nzSpan]="1">{{
+        list.language
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="E-mail" [nzSpan]="2">{{
+        list.email
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Operating as Name" [nzSpan]="2">{{
+        list.operatingAsName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Card Holder Name" [nzSpan]="2">{{
+        list.cardHolderName
+      }}</nz-descriptions-item>
+
+      <nz-descriptions-item
+        nzTitle="
+      Years of Ownership"
+        [nzSpan]="1"
+        >{{ list.yearsOfOwnership }}</nz-descriptions-item
+      >
+      <nz-descriptions-item nzTitle="Month of Ownership" [nzSpan]="1">{{
+        list.monthOfOwnership
+      }}</nz-descriptions-item>
+      <nz-descriptions-item
+        nzTitle="
+      Customer Service Phone no"
+        [nzSpan]="1"
+        >{{ list.customerServicePhoneNo }}</nz-descriptions-item
+      >
+    </nz-descriptions>
+    }
+    <!-- <nz-divider></nz-divider> -->
+    @for (list of merchantDetail[4]?.merchantLocation ; track $index) {
+    <nz-descriptions [nzColumn]="2" nzTitle="Merchant Location">
+      <nz-descriptions-item nzTitle="Location Type Id" [nzSpan]="1">{{
+        list.locationTypeId
+      }}</nz-descriptions-item>
+      <nz-descriptions-item
+        nzTitle="
+      Telephone"
+        [nzSpan]="1"
+        >{{ list.telephone }}</nz-descriptions-item
+      >
+      <nz-descriptions-item nzTitle="Country" [nzSpan]="1">{{
+        list.country
+      }}</nz-descriptions-item>
+      <nz-descriptions-item
+        nzTitle="
+      Province"
+        [nzSpan]="1"
+        >{{ list.province }}</nz-descriptions-item
+      >
+
+      <nz-descriptions-item nzTitle="City" [nzSpan]="1">{{
+        list.city
+      }}</nz-descriptions-item>
+      <nz-descriptions-item
+        nzTitle="
+      Postal Code"
+        [nzSpan]="1"
+        >{{ list.postalCode }}</nz-descriptions-item
+      >
+      <nz-descriptions-item nzTitle="Address no" [nzSpan]="1">{{
+        list.addressNo
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Street Name" [nzSpan]="1">{{
+        list.street
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+    }
+    <!-- <nz-divider></nz-divider> -->
+    @for (list of merchantDetail[5]?.businessActivity ; track $index) {
+    <nz-descriptions [nzColumn]="2" nzTitle="Business Activity">
+      <nz-descriptions-item nzTitle="Drop Shipping" [nzSpan]="1">{{
+        list.dropShipping
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+    }
+    <!-- <nz-divider></nz-divider> -->
+    @for (list of merchantDetail[6]?.securityDetail ; track $index) {
+    <nz-descriptions [nzColumn]="2" nzTitle="Security Detail">
+      <nz-descriptions-item nzTitle="First Name" [nzSpan]="1">{{
+        list.firstName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Last Name" [nzSpan]="1">{{
+        list.lastName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Birth Date" [nzSpan]="1">{{
+        list.birthDate
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Allow Credit Reports" [nzSpan]="1">{{
+        list.allowCreditReports
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Percentage Ownership" [nzSpan]="1">{{
+        list.percentageOfOwnership
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Title" [nzSpan]="1">{{
+        list.title
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Type of Business" [nzSpan]="1">{{
+        list.typeOfBusiness
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+    }
+  </ng-container>
+</nz-drawer>

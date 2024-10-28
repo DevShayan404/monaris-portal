@@ -1,0 +1,151 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="child-section">
+        <form>
+          <div class="row">
+            <div class="col-12">
+              <h4 class="m-0">Merchant</h4>
+            </div>
+            <div class="col-12">
+              <div class="row g-3 mt-1">
+                <div class="col-6">
+                  <label class="form-label text-secondary">Merchant Id</label>
+                  <nz-select class="form-control nzSelectPadding">
+                    @for (option of listOfOption; track $index) {
+                    <nz-option [nzLabel]="option" [nzValue]="option"></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Language</label>
+                  <nz-select class="form-control nzSelectPadding">
+                    @for (option of listOfOption; track $index) {
+                    <nz-option [nzLabel]="option" [nzValue]="option"></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label text-secondary"
+                    >Operating as Name</label
+                  >
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Email</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Customer Service Phone no</label
+                  >
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <h4 class="m-0">Contact</h4>
+            </div>
+            <div class="col-12">
+              <div class="row g-3 mt-1">
+                <div class="col-6">
+                  <label class="form-label text-secondary">First Name</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Last Name</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary">Phone no</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary">Extension</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary">Mobile</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <h4 class="m-0">Location</h4>
+            </div>
+            <div class="col-12">
+              <div class="row g-3 mt-1">
+                <div class="col-12">
+                  <label class="form-label text-secondary">Address</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Street Name</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Postal Code</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary">City</label>
+                  <nz-select class="form-control nzSelectPadding">
+                    @for (option of listOfOption; track $index) {
+                    <nz-option [nzLabel]="option" [nzValue]="option"></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary">Country</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-secondary">Province</label>
+                  <nz-select class="form-control nzSelectPadding">
+                    @for (option of listOfOption; track $index) {
+                    <nz-option [nzLabel]="option" [nzValue]="option"></nz-option
+                    >}
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <h4 class="m-0">Business Detail</h4>
+            </div>
+            <div class="col-12">
+              <div class="row g-3 mt-1">
+                <div class="col-12">
+                  <label class="form-label text-secondary">Business Url</label>
+                  <input type="text" class="form-control" placeholder="" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <h4 class="m-0">Contact Type</h4>
+            </div>
+            <div class="col-12">
+              <div class="row g-3 mt-1">
+                <div class="col-12">
+                  <label class="form-label text-secondary">Contact Type</label>
+                  <nz-select class="form-control nzSelectPadding">
+                    @for (option of listOfOption; track $index) {
+                    <nz-option [nzLabel]="option" [nzValue]="option"></nz-option
+                    >}
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <button class="btn btn-warning float-end">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

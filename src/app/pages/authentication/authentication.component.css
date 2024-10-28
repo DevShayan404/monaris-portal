@@ -1,0 +1,35 @@
+.authentication-main {
+  width: 100%;
+  height: 100vh;
+}
+.authentication-cover {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  position: relative;
+  background: rgba(5, 29, 51, 0.95);
+  /* background: rgb(92, 103, 247, 0.95); */
+  color: #fff;
+}
+.authentication-cover::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  inset-block-start: 0;
+  inset-block-end: 0;
+  background-image: url("../../../assets/images/media-84-Q72G4JX5.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+.authentication-cover img {
+  position: absolute;
+  top: 14px;
+  left: 46px;
+}

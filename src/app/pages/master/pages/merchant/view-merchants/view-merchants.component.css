@@ -1,0 +1,19 @@
+::ng-deep.ant-descriptions-item-label {
+  font-weight: 400;
+}
+.ant-divider-horizontal {
+  margin: 14px 0 !important;
+}
+
+::ng-deep.ant-descriptions-title {
+  background: #fafafa;
+  padding: 10px;
+  font-weight: 500;
+  color: #000;
+  border: 0;
+  border-bottom: 1px solid #d7d7d7;
+}
+::ng-deep.ant-descriptions-view {
+  border-radius: 6px;
+  padding: 0 10px;
+}

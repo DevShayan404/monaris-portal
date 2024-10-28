@@ -1,0 +1,40 @@
+<div class="card mx-5">
+  <div class="card-body">
+    <!-- <div class="d-block text-center mb-3">
+      <img src="assets\images\logo.png" class="ms-3" />
+    </div> -->
+    <h2 class="text-center">Sign In</h2>
+    <p class="text-center">Don’t have an account yet? <span>Sign Up</span></p>
+    <form class="pt-4" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="d-block">
+        <label class="form-label text-secondary">User Name</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="userName"
+          placeholder=""
+          [ngClass]="{ 'is-invalid': isControlInvalid('userName') }"
+        />
+      </div>
+      <div class="d-block mt-3">
+        <label class="form-label text-secondary">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="password"
+          placeholder=""
+          [ngClass]="{ 'is-invalid': isControlInvalid('password') }"
+        />
+      </div>
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <p class="d-flex align-items-center m-0">
+          <input type="checkbox" class="me-2" /> Remember me
+        </p>
+        <span>Forget password?</span>
+      </div>
+      <div class="d-block mt-4">
+        <button class="btn btn-primary w-100">Sign In</button>
+      </div>
+    </form>
+  </div>
+</div>

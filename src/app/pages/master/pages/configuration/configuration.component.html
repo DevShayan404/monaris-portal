@@ -1,0 +1,111 @@
+<div class="container-fluid">
+  <div class="row g-3">
+    <!-- <div class="col-12">
+      <div class="child-section">
+        <nz-segmented
+          [nzOptions]="options"
+          (nzValueChange)="handleIndexChange($event)"
+          [nzBlock]="true"
+        ></nz-segmented>
+    </div> -->
+    <div class="col-12">
+      <div class="child-section">
+        <div class="row align-items-center">
+          <div class="col-3">
+            <nz-select
+              class="form-control nzSelectPadding"
+              [(ngModel)]="selectedValue"
+              (ngModelChange)="changeListName($event)"
+            >
+              @for (option of dropdownList ; track $index) {
+              <nz-option
+                [nzLabel]="option?.tableName"
+                [nzValue]="option?.tableName"
+              ></nz-option
+              >}
+            </nz-select>
+          </div>
+          <div class="col-3">
+            <nz-input-group [nzPrefix]="prefixTemplateUser">
+              <input
+                type="text"
+                nz-input
+                placeholder="Search here..."
+                [(ngModel)]="searchKeyword"
+              />
+            </nz-input-group>
+            <ng-template #prefixTemplateUser>
+              <i nz-icon class="bi bi-search"></i
+            ></ng-template>
+          </div>
+          <div class="col-6">
+            <div class="float-end">
+              <button class="btn btn-warning" (click)="open()">
+                <i class="bi bi-plus-lg me-2"></i>Add New
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <nz-table
+              #basicTable
+              [nzData]="tableData | search : searchKeyword"
+              nzSize="middle"
+              ngSkipHydration
+              ngSkipHydration
+              [nzPageSize]="7"
+              [nzPageIndex]="1"
+              [nzFrontPagination]="true"
+              [nzLoading]="loading"
+            >
+              <thead>
+                <tr>
+                  @for (header of tableHeaders; track $index) {
+                  <th>{{ header | titlecase }}</th>
+                  } @if (!loading) {
+                  <th>Action</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (data of basicTable.data; track $index) {
+                <tr>
+                  @for (header of tableHeaders; track $index) {
+                  <td class="text-secondary">{{ data[header] }}</td>
+                  }
+                  <td>
+                    <!-- <i class="bi bi-trash text-danger"></i>
+                    <nz-divider nzType="vertical"></nz-divider> -->
+                    <i class="bi bi-pencil-square text-primary"></i>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nz-drawer
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzMaskClosable]="false"
+  [nzVisible]="visible"
+  [nzTitle]="'Add New' + ' ' + selectedValue"
+  [nzFooter]="footerTpl"
+  (nzOnClose)="close()"
+>
+  <div *nzDrawerContent>hello</div>
+
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <!-- <button nz-button style="margin-right: 8px" (click)="close()">
+        Cancel
+      </button> -->
+      <button class="btn btn-warning" (click)="close()">Submit</button>
+    </div>
+  </ng-template>
+</nz-drawer>

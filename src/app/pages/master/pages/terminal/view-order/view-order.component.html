@@ -1,0 +1,127 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="child-section">
+        <div class="row align-items-center">
+          <div class="col-3">
+            <nz-input-group [nzPrefix]="prefixTemplateUser">
+              <input
+                type="text"
+                nz-input
+                placeholder="Search here..."
+                [(ngModel)]="searchKeyword"
+              />
+            </nz-input-group>
+            <ng-template #prefixTemplateUser>
+              <i nz-icon class="bi bi-search"></i
+            ></ng-template>
+          </div>
+          <div class="col-9">
+            <div class="float-end">
+              <button class="btn btn-warning" (click)="generatePDF()">
+                <i class="bi bi-box-arrow-in-down-left me-1"></i>Export
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <nz-table
+              #basicTable
+              [nzData]="tableList | search : searchKeyword"
+              nzSize="middle"
+              ngSkipHydration
+              [nzPageSize]="6"
+              [nzPageIndex]="1"
+              [nzLoading]="loading"
+              [nzFrontPagination]="true"
+              [nzScroll]="{ x: '1700px' }"
+            >
+              <thead>
+                <tr>
+                  <th>MID</th>
+                  <th nzLeft>Order Id</th>
+                  <th>Legal Name</th>
+                  <th>E-mail</th>
+                  <th>Customer service phone no.</th>
+                  <th>Operating as Name</th>
+                  <th>Adjudication Approval Status</th>
+                  <th nzRight>Status</th>
+                  <th nzRight>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (data of basicTable.data; track data?.clientId ; let i =
+                $index) {
+                <tr>
+                  <td class="text-secondary">
+                    {{ data?.merchantID }}
+                  </td>
+                  <td nzLeft class="text-secondary">
+                    {{ data?.monerisOrderId }}
+                  </td>
+                  <td class="text-secondary">{{ data?.legalName }}</td>
+                  <td class="text-secondary">{{ data?.email }}</td>
+                  <td class="text-secondary">
+                    {{ data?.customerServicePhoneNumber }}
+                  </td>
+                  <td class="text-secondary">{{ data?.operatingAsName }}</td>
+                  <td class="text-secondary">
+                    @if(data?.adjudicationApprovalStatus === 'Pending'){
+                    <nz-tag [nzColor]="'red'" [nzBordered]="false">{{
+                      data?.adjudicationApprovalStatus
+                    }}</nz-tag>
+                    }@else if (data?.adjudicationApprovalStatus === 'Manual') {
+                    <nz-tag [nzColor]="'blue'" [nzBordered]="false">{{
+                      data?.adjudicationApprovalStatus
+                    }}</nz-tag>
+                    } @else if (data?.adjudicationApprovalStatus === 'Credit
+                    Adjudication') {
+                    <nz-tag [nzColor]="'green'" [nzBordered]="false">{{
+                      data?.adjudicationApprovalStatus
+                    }}</nz-tag>
+                    }@else {
+                    <nz-tag [nzColor]="'gold'" [nzBordered]="false">{{
+                      data?.adjudicationApprovalStatus
+                    }}</nz-tag>
+                    }
+                  </td>
+                  <td class="text-secondary" nzRight>
+                    @if(data?.status === 'Pending'){
+                    <nz-tag [nzColor]="'red'" [nzBordered]="false">{{
+                      data?.status
+                    }}</nz-tag>
+                    }@else if (data?.status === 'Manual') {
+                    <nz-tag [nzColor]="'blue'" [nzBordered]="false">{{
+                      data?.status
+                    }}</nz-tag>
+                    }@else if (data?.status === 'Credit Adjudication' ||
+                    data?.status === 'Conditionally Approved') {
+                    <nz-tag [nzColor]="'purple'" [nzBordered]="false">{{
+                      data?.status
+                    }}</nz-tag>
+                    }@else {
+                    <nz-tag [nzColor]="'green'" [nzBordered]="false">{{
+                      data?.status
+                    }}</nz-tag>
+                    }
+                  </td>
+                  <td nzRight>
+                    <div [ngClass]="{ spin: isSpinning[i] }">
+                      <i
+                        (click)="checkStatus(i, data?.monerisOrderId)"
+                        class="bi bi-arrow-repeat text-primary"
+                        style="font-size: 18px; cursor: pointer"
+                      ></i>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

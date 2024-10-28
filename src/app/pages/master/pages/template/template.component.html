@@ -1,0 +1,137 @@
+<div class="container-fluid child-section">
+    <div class="row">
+      <div class="col d-flex align-items-center justify-content-between">
+        <h4 class="m-0">
+          Bearer Token
+          <span class="text-secondary"
+            >All (<a class="text-warning">400</a>)</span
+          >
+        </h4>
+        <button
+          class="btn btn-warning d-flex align-items-center"
+          type="button"
+          (click)="toggleCollapse()"
+        >
+          @if (!collapse) { <i class="bi bi-plus-lg me-1"></i
+          ><span>Add New </span> }@else {
+  
+          <i class="bi bi-x-lg me-1"></i><span>Cancel</span> }
+        </button>
+      </div>
+    </div>
+    <div [@slideToggle]="collapse ? 'open' : 'closed'">
+      <form [formGroup]="bearerTokenForm" (ngSubmit)="submitBearerForm('scroll')">
+        <div class="row g-3 mt-2">
+          <div class="col-6">
+            <label for="clientId" class="form-label text-secondary">Client Id</label>
+            <input
+              type="text"
+              class="form-control"
+              id="clientId"
+              formControlName="clientId"
+              [ngClass]="{'is-invalid': isControlInvalid('clientId')}"
+              placeholder=""
+            />
+          </div>
+          <div class="col-6">
+            <label for="clientSecret" class="form-label text-secondary">Client Secret</label>
+            <input
+              type="text"
+              class="form-control"
+              id="clientSecret"
+              formControlName="clientSecret"
+              [ngClass]="{'is-invalid': isControlInvalid('clientSecret')}"
+              placeholder=""
+            />
+          </div>
+          <div class="col-6">
+            <label for="grantType" class="form-label text-secondary">Grant Type</label>
+            <input
+              type="text"
+              class="form-control"
+              id="grantType"
+              formControlName="grantType"
+              [ngClass]="{'is-invalid': isControlInvalid('grantType')}"
+              placeholder=""
+            />
+          </div>
+          <div class="col-6">
+            <label for="scope" class="form-label text-secondary">Scope</label>
+            <input
+              type="text"
+              class="form-control"
+              id="scope"
+              formControlName="scope"
+              [ngClass]="{'is-invalid': isControlInvalid('scope')}"
+              placeholder=""
+            />
+          </div>
+          <div class="col-12">
+            <label for="authUrl" class="form-label text-secondary">Auth Url</label>
+            <input
+              type="text"
+              class="form-control"
+              id="authUrl"
+              formControlName="authUrl"
+              [ngClass]="{'is-invalid': isControlInvalid('authUrl')}"
+              placeholder=""
+            />
+          </div>
+          <div class="col">
+            <button class="btn btn-warning">Submit</button>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+  <div class="container-fluid child-section mt-3" id="scroll">
+    <div class="row">
+      <div class="col-3">
+        <nz-input-group [nzPrefix]="prefixTemplateUser">
+          <input type="text" nz-input placeholder="Search here..." />
+        </nz-input-group>
+        <ng-template #prefixTemplateUser>
+          <i nz-icon class="bi bi-search"></i
+        ></ng-template>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        <nz-table
+          #basicTable
+          [nzData]="listOfData"
+          nzSize="middle"
+          ngSkipHydration
+        >
+          <thead>
+            <tr>
+              <th>Client Id</th>
+              <th>Client Secret</th>
+              <th>Grant Type</th>
+              <th>Scope</th>
+              <th>Auth Url</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (data of basicTable.data; track $index) {
+            <tr>
+              <td>{{ data.clientId }}</td>
+              <td class="text-secondary">{{ data.clientSecret }}</td>
+              <td class="text-secondary">{{ data.grantType }}</td>
+              <td class="text-secondary">{{ data.scope }}</td>
+              <td class="text-secondary">{{ data.authUrl }}</td>
+              <td>
+                <i class="bi bi-trash text-danger"></i>
+                <nz-divider nzType="vertical"></nz-divider>
+                <i class="bi bi-pencil-square text-primary"></i>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+  

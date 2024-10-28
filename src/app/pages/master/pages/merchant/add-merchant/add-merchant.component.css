@@ -1,0 +1,43 @@
+.merchant-main::ng-deep.ant-steps-vertical.ant-steps-dot
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-icon
+  .ant-steps-icon-dot {
+  background-color: var(--secondary-color);
+}
+.merchant-main::ng-deep.ant-steps-item-finish
+  .ant-steps-item-icon
+  > .ant-steps-icon
+  .ant-steps-icon-dot {
+  background-color: var(--secondary-color);
+}
+.merchant-main::ng-deep.ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: var(--secondary-color);
+}
+.merchant-main::ng-deep.ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 14px;
+}
+.merchant-main::ng-deep.ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+.merchant-main::ng-deep.ant-steps-item-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 14px;
+}
+
+
+.ant-divider-horizontal {
+  margin: 12px 0;
+}

@@ -1,0 +1,422 @@
+<div class="container-fluid">
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="child-section">
+        <nz-steps [nzCurrent]="firstFormCurrent" nzProgressDot>
+          <nz-step nzTitle="Card Plan"></nz-step>
+          <nz-step nzTitle="Card Rate"></nz-step>
+          <nz-step nzTitle="Product Fee"></nz-step>
+        </nz-steps>
+      </div>
+    </div>
+    <div class="col-12">
+      <div
+        class="child-section"
+        style="
+          min-height: calc(100vh - 37vh);
+          max-height: calc(100vh - 37vh);
+          overflow: auto;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        "
+      >
+        <div class="row">
+          @switch (firstFormCurrent) { @case (0) {
+          <form [formGroup]="cardPlan">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label text-secondary">Merchant Id</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="merchantId"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardPlan('merchantId')
+                    }"
+                  >
+                    @for (option of dropdownList?.chaindetails; track $index) {
+                    <nz-option
+                      [nzLabel]="option?.mId + ' ' + option?.chainDescription"
+                      [nzValue]="option?.mId"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Cnp Var Config Code</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="cnpVarConfigCode"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardPlan('cnpVarConfigCode')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Calculation Method</label
+                  >
+
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="calculationMethod"
+                    [ngClass]="{
+                      'is-invalid':
+                        isControlInvalidCardPlan('calculationMethod')
+                    }"
+                  >
+                    @for (option of dropdownList?.calculationMethods; track
+                    $index) {
+                    <nz-option
+                      [nzLabel]="option?.name"
+                      [nzValue]="option?.name"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">MDR Type</label>
+
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="mdrType"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardPlan('mdrType')
+                    }"
+                  >
+                    @for (option of dropdownList?.mDRTypes; track $index) {
+                    <nz-option
+                      [nzLabel]="option?.name"
+                      [nzValue]="option?.name"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Currency</label>
+                  <nz-select
+                    class="form-control nzSelectPadding"
+                    formControlName="currency"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardPlan('currency')
+                    }"
+                  >
+                    @for (option of dropdownList?.merchantCurrencies; track
+                    $index) {
+                    <nz-option
+                      [nzLabel]="option?.code"
+                      [nzValue]="option?.code"
+                    ></nz-option
+                    >}
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+          </form>
+          }@case (1) {
+          <form [formGroup]="cardRate">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary">Visa MDR</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="visaMdr"
+                    (input)="formatInputcardRate($event, 'visaMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('visaMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Visa Txn</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="visaTxn"
+                    (input)="formatInputcardRate($event, 'visaTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('visaTxn')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Visa Debit MDR</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="visaDebitMdr"
+                    (input)="formatInputcardRate($event, 'visaDebitMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('visaDebitMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Visa Debit Txn</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="visaDebitTxn"
+                    (input)="formatInputcardRate($event, 'visaDebitTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('visaDebitTxn')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Master MDR</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="masterMdr"
+                    (input)="formatInputcardRate($event, 'masterMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('masterMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Master Txn</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="masterTxn"
+                    (input)="formatInputcardRate($event, 'masterTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('masterTxn')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Master Debit MDR</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="masterDebitMdr"
+                    (input)="formatInputcardRate($event, 'masterDebitMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('masterDebitMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Master Debit Txn</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="masterDebitTxn"
+                    (input)="formatInputcardRate($event, 'masterDebitTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('masterDebitTxn')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Interac MDR</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="interacMdr"
+                    (input)="formatInputcardRate($event, 'interacMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('interacMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Interac Txn</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="interacTxn"
+                    (input)="formatInputcardRate($event, 'interacTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('interacTxn')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Discover MDR</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="discoverMdr"
+                    (input)="formatInputcardRate($event, 'discoverMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('discoverMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Discover Txn</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="discoverTxn"
+                    (input)="formatInputcardRate($event, 'discoverTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('discoverTxn')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Union Pay MDR</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="unionPayMdr"
+                    (input)="formatInputcardRate($event, 'unionPayMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('unionPayMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Union Pay Txn</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="unionPayTxn"
+                    (input)="formatInputcardRate($event, 'unionPayTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('unionPayTxn')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Amex MDR</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="amexMdr"
+                    (input)="formatInputcardRate($event, 'amexMdr')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('amexMdr')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Amex Txn</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="amexTxn"
+                    (input)="formatInputcardRate($event, 'amexTxn')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidCardRate('amexTxn')
+                    }"
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+          }@case (2) {
+          <form [formGroup]="productFee">
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label text-secondary">Base Fee</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="base"
+                    (input)="formatInputProductFee($event, 'base')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidProductFee('base')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Setup Fee</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="setup"
+                    (input)="formatInputProductFee($event, 'setup')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidProductFee('setup')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary"
+                    >Transaction Fee</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="transaction"
+                    (input)="formatInputProductFee($event, 'transaction')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidProductFee('transaction')
+                    }"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary">Recurring Fee</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="recurring"
+                    (input)="formatInputProductFee($event, 'recurring')"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalidProductFee('recurring')
+                    }"
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+          } }
+        </div>
+        <!-- -------------------buttons----------------------- -->
+        <div class="steps-action mt-3">
+          <button
+            (click)="firstFormPre()"
+            *ngIf="firstFormCurrent > 0"
+            class="btn btn-warning text-white"
+          >
+            <i class="bi bi-chevron-left"></i> Previous
+          </button>
+          <div class="float-end">
+            <button
+              class="btn btn-warning text-white"
+              (click)="firstFormNext()"
+              *ngIf="firstFormCurrent < 2"
+            >
+              Next <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="float-end">
+            <button
+              class="btn btn-warning text-white"
+              (click)="onSubmitProductFee()"
+              *ngIf="firstFormCurrent === 2"
+            >
+              Submit @if (spinner) {
+              <div class="spinner-grow spinner-grow-sm ms-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
